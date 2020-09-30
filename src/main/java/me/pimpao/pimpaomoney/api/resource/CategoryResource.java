@@ -34,7 +34,8 @@ public class CategoryResource {
     }
 
     @GetMapping(value = "/{id}")
-    public Category findById(@PathVariable Long id) {
-        return categoryRepository.findById(id).orElse(null);
+    public ResponseEntity<Category> findById(@PathVariable Long id) {
+        Category category = categoryRepository.findById(id).orElse(null);
+        return category != null ? ResponseEntity.ok(category) : ResponseEntity.notFound().build();
     }
 }
