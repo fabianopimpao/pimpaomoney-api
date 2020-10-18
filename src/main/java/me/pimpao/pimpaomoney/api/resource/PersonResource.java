@@ -3,8 +3,11 @@ package me.pimpao.pimpaomoney.api.resource;
 import me.pimpao.pimpaomoney.api.event.ResourceCreatedEvent;
 import me.pimpao.pimpaomoney.api.model.Person;
 import me.pimpao.pimpaomoney.api.repository.PersonRepository;
+import me.pimpao.pimpaomoney.api.service.PersonService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,9 @@ public class PersonResource {
 
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private PersonService personService;
 
     @Autowired
     private ApplicationEventPublisher publisher;
@@ -47,5 +53,11 @@ public class PersonResource {
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         personRepository.deleteById(id);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Person> update(@PathVariable Long id, @Valid @RequestBody Person person) {
+        Person updatePerson = personService.update(id, person);
+        return ResponseEntity.ok(updatePerson);
     }
 }
