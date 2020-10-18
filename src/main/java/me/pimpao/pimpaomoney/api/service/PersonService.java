@@ -14,8 +14,19 @@ public class PersonService {
     private PersonRepository personRepository;
 
     public Person update(Long id, Person person) {
-        Person updatePerson = personRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException(1));
+        Person updatePerson = getPersonById(id);
         BeanUtils.copyProperties(person, updatePerson, "id");
         return personRepository.save(updatePerson);
     }
+
+    public void updateActiveProperty(Long id, Boolean active) {
+        Person updatePerson = getPersonById(id);
+        updatePerson.setActive(active);
+        personRepository.save(updatePerson);
+    }
+
+    private Person getPersonById(Long id) {
+        return personRepository.findById(id).orElseThrow(() -> new EmptyResultDataAccessException(1));
+    }
+
 }

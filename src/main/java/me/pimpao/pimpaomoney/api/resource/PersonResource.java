@@ -60,4 +60,10 @@ public class PersonResource {
         Person updatePerson = personService.update(id, person);
         return ResponseEntity.ok(updatePerson);
     }
+
+    @PutMapping(value = "/{id}/active")
+    public ResponseEntity<Void> updateActiveProperty(@PathVariable Long id, @RequestBody Boolean active) {
+        personService.updateActiveProperty(id, active);
+        return ResponseEntity.noContent().build();
+    }
 }
